@@ -64,15 +64,10 @@ jobs:
           install.packages(c('remotes', 'rprojroot', 'renv', 'desc'))
         shell: Rscript {0}
 
-      - name: list files
-        if: steps.check-rmd.outputs.count != 0
-        run:
-          ls -la
-
       - name: Query dependencies
         if: steps.check-rmd.outputs.count != 0
         run: |
-          source('bin/dependencies.R')
+          source('lesson/bin/dependencies.R')
           deps <- identify_dependencies()
           create_description(deps)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
