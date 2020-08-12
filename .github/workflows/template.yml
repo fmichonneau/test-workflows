@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lesson: [swcarpentry/shell-novice, datacarpentry/r-intro-geospatial, librarycarpentry/lc-git]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        lesson: [datacarpentry/r-intro-geospatial] #[swcarpentry/shell-novice, datacarpentry/r-intro-geospatial, librarycarpentry/lc-git]
+        os: [ubuntu-20.04] #, macos-latest, windows-latest]
     defaults:
       run:
         shell: bash # forces 'Git for Windows' on Windows
@@ -64,10 +64,14 @@ jobs:
           install.packages(c('remotes', 'rprojroot', 'renv', 'desc'))
         shell: Rscript {0}
 
+      - name: list files
+        if: steps.check-rmd.outputs.count != 0
+        run:
+          ls -la
+
       - name: Query dependencies
         if: steps.check-rmd.outputs.count != 0
         run: |
-          dir()
           source('bin/dependencies.R')
           deps <- identify_dependencies()
           create_description(deps)
