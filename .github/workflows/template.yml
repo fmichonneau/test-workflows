@@ -6,7 +6,7 @@ on:
 jobs:
   check-template:
     name: Test lesson template
-    if: github.repository == 'carpentries/styles'
+    if: github.repository == 'fmichonneau/test-workflows'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
