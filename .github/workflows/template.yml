@@ -67,6 +67,7 @@ jobs:
       - name: Query dependencies
         if: steps.check-rmd.outputs.count != 0
         run: |
+          dir()
           source('bin/dependencies.R')
           deps <- identify_dependencies()
           create_description(deps)
