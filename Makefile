@@ -119,14 +119,14 @@ HTML_DST = \
   $(patsubst _extras/%.md,${DST}/%/index.html,$(sort $(wildcard _extras/*.md))) \
   ${DST}/license/index.html
 
+## * install-rmd-dependencies: Install R packages dependencies to build the RMarkdown lesson
+install-rmd-dependencies:
+	Rscript -e 'source("bin/dependencies.R"); install_dependencies(identify_dependencies())'
+
 ## * lesson-md        : convert Rmarkdown files to markdown
 lesson-md : ${RMD_DST}
 
-depends.rds:
-	Rscript -e 'source("bin/dependencies.R"); deps <- identify_dependencies(); install_dependencies(deps); record_dependencies(deps)'
-
-
-_episodes/%.md: _episodes_rmd/%.Rmd depends.rds
+_episodes/%.md: _episodes_rmd/%.Rmd install-rmd-dependencies
 	mkdir -p _episodes
 	@bin/knit_lessons.sh $< $@
 

@@ -60,13 +60,9 @@ install_dependencies <- function(required_pkgs,
 
 }
 
-record_dependencies <- function(required_pkgs,
-                                path = file.path(find_root(), "depends.rds"),
-                                ...) {
-
-  av_pkgs <- available.packages(...)
-
-  res <- av_pkgs[match(required_pkgs, rownames(av_pkgs)), "Version"]
-
-  saveRDS(res, path, version = 2)
+create_description <- function(required_pkgs) {
+  require("desc")
+  d <- description$new("!new")
+  lapply(required_pkgs, function(x) d$set_dep(x))
+  d$write("DESCRIPTION")
 }
