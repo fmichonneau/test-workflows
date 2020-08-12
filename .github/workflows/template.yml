@@ -1,7 +1,7 @@
 name: Template
 on:
   push:
-    branches: gh-pages
+    branches: master
   pull_request: []
 jobs:
   check-template:
