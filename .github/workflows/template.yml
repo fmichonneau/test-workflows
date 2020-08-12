@@ -66,8 +66,9 @@ jobs:
 
       - name: Query dependencies
         if: steps.check-rmd.outputs.count != 0
+        working-directory: lesson
         run: |
-          source('lesson/bin/dependencies.R')
+          source('bin/dependencies.R')
           deps <- identify_dependencies()
           create_description(deps)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
@@ -76,13 +77,15 @@ jobs:
       - name: Cache R packages
         if: runner.os != 'Windows' && steps.check-rmd.outputs.count != 0
         uses: actions/cache@v1
+        working-directory: lesson
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
       - name: Install system dependencies
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && steps.check-rmd.outputs.count != 0
+        working-directory: lesson
         run: |
           while read -r cmd
           do
@@ -91,6 +94,7 @@ jobs:
 
       - name: Install lesson package dependencies
         if: steps.check-rmd.outputs.count != 0
+        working-directory: lesson
         run: |
           remotes::install_deps(dependencies = TRUE)
           file.remove("DESCRIPTION")
